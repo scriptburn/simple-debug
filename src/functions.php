@@ -66,3 +66,37 @@ if (!function_exists('p_c'))
         echo ("<script>console.log('$str' );console.log($msg)</script>");
     }
 }
+if (!function_exists('p_l'))
+{
+       function p_l($msg, $dump = false)
+
+    {
+        $bt = debug_backtrace();
+
+        $caller1 = $bt[0];
+        $caller2 = @$bt[1];
+
+        $caller1['file'] = str_replace(__DIR__, "", $caller1['file']);
+        $str             = microtime(true) . "-" . $caller1['file'] . "@" . @$caller2['function'] . "():$caller1[line]" . "-->";
+        if ($dump !== 1)
+        {
+            error_log($str);
+        }
+
+        if ($dump === true)
+        {
+            ob_start();
+            var_dump($msg);
+            $rr = ob_get_clean();
+        }
+        elseif ($dump)
+        {
+            return $dump;
+        }
+        else
+        {
+           error_log( print_r($msg, 1));
+        }
+
+    }
+}
